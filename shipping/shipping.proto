@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option go_package = "github.com/chyiyaqing/gmicro-proto/shipping";
+
+message CreateShippingRequest {
+    string address = 1;
+}
+
+message CreateShippingResponse {
+    int64 shipping_id = 1;
+}
+
+service Shipping {
+    rpc Create(CreateShippingRequest) returns (CreateShippingResponse){}
+}
