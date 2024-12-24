@@ -23,12 +23,13 @@ protoc \
     ./${SERVICE_NAME}/*.proto
 
 # 初始化Go 模块
+mkdir -p golang/${SERVICE_NAME}
 cd golang/${SERVICE_NAME}
 go mod init github.com/chyiyaqing/gmicro-proto/golang/${SERVICE_NAME} || true
 go mod tidy
 
 cd ../../
-git add . && git commit -am "proto update" || true
+git pull && git add . && git commit -am "proto update" || true
 git push origin HEAD:main
 
 # 版本标签管理
