@@ -17,3 +17,9 @@
 ```bash
 ./run.sh shipping v0.0.1 chyiyaqing chyiyaqing@gmail.com
 ```
+
+打Tag
+
+```bash
+git tag v0.0.8 && git push origin v0.0.8
+```
