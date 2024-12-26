@@ -3,7 +3,6 @@ module github.com/chyiyaqing/gmicro-proto/golang/user
 go 1.22.10
 
 require (
-	github.com/golang/protobuf v1.5.4
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.25.1
 	google.golang.org/genproto/googleapis/api v0.0.0-20241219192143-6b3ec007d9bb
 	google.golang.org/grpc v1.69.2
