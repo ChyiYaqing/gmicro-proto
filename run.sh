@@ -32,6 +32,8 @@ protoc \
     --grpc-gateway_out=./golang \
     --grpc-gateway_opt=paths=source_relative \
     --grpc-gateway_opt=generate_unbound_methods=true \
+    --openapiv2_out=./golang \
+    --openapiv2_opt=generate_unbound_methods=true \
     ${SERVICE_NAME}/**/*.proto
 # 
 
