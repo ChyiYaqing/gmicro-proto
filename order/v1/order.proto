@@ -1,6 +1,7 @@
 syntax = "proto3";
 
-option go_package = "github.com/chyiyaqing/gmicro-proto/order";
+package order.v1;
+option go_package = "github.com/chyiyaqing/gmicro-proto/order/v1";
 
 message CreateOrderRequest {
     int64 user_id = 1;

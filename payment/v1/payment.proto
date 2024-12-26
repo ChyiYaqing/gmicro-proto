@@ -1,6 +1,7 @@
 syntax = "proto3";
 
-option go_package = "github.com/chyiyaqing/gmicro-proto/payment";
+package payment.v1;
+option go_package = "github.com/chyiyaqing/gmicro-proto/payment/v1";
 
 message CreatePaymentRequest {
     int64 user_id = 1;

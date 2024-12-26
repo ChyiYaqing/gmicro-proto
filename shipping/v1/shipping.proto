@@ -1,6 +1,7 @@
 syntax = "proto3";
 
-option go_package = "github.com/chyiyaqing/gmicro-proto/shipping";
+package shipping.v1;
+option go_package = "github.com/chyiyaqing/gmicro-proto/shipping/v1";
 
 message CreateShippingRequest {
     int64 user_id = 1;
