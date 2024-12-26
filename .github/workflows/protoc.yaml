@@ -27,6 +27,7 @@ jobs:
       - name: "Generate for Golang"
         shell: bash
         run: |
+          export PATH=$PATH:$(go env GOPATH)/bin
           chmod +x "${GITHUB_WORKSPACE}/run.sh"
           ls -alh ${GITHUB_WORKSPACE}
           ./run.sh ${{ matrix.service }} ${{ env.RELEASE_VERSION }} ${{ github.actor }} ${{ github.actor }}@gmail.com
