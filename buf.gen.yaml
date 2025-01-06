@@ -31,6 +31,6 @@ plugins:
       - paths=source_relative
       - allow_repeated_fields_in_body=true
   - local: protoc-gen-openapiv2
-    out: openapiv2
+    out: openapiv2/OpenAPI
     opt: 
       - allow_repeated_fields_in_body=true
