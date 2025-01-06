@@ -1,0 +1,19 @@
+# buf.yaml 文件配置应放在Protobuf文件层次结构的根目录
+# buf与protoc命令不同，protoco需要手动指定proto文件的路径，而buf会自动扫描所有proto文件
+version: v2
+# The v2 buf.yaml file specifies a local workspace, which consists of at least one module.
+# The buf.yaml file should be placed at the root directory of the workspace, which
+# should generally be the root of your source control repository.
+modules:
+  # Each module entry defines a path, which must be relative to the directory where the
+  # buf.yaml is located. You can also specify directories to exclude from a module.
+  - path: proto
+deps:
+  - buf.build/googleapis/googleapis
+  - buf.build/grpc-ecosystem/grpc-gateway
+lint:
+  use:
+    - STANDARD
+breaking:
+  use:
+    - FILE

@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+package user.v1;
+option go_package = "github.com/chyiyaqing/gmicro-proto/user/v1";
+
+// well known type by google, gRPC gateway uses HTTP annotation.
+import "google/api/annotations.proto"; // 导入Google API注解
+import "protoc-gen-openapiv2/options/annotations.proto"; // 用于生成OpenAPI (Swagger) 文档
+
+// These annotations are used when generating the OpenAPI file.
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+    info: {version: "1.0"}
+    external_docs: {
+        url: "https://";
+        description: "gRPC-gateway gmicro-user proto";
+    }
+    schemes: HTTPS;
+};
+
+// 消息名应该是 PascalCase
+message CreateUserRequest {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+        json_schema: {
+            title: "CreateUserRequest"
+            description: "Create User"
+            required: ["name", "email", "phone"]
+        }
+        example: ""
+    };
+    // 字段名应该是 lower_snake_case
+    string name = 1;
+    string email = 2;
+    string phone = 3;
+    string address = 4;
+}
+
+message CreateUserResponse {
+    int64 user_id = 1;
+}
+
+message GetUserRequest {
+    int64 user_id = 1;
+}
+
+message GetUserResponse {
+    int64 user_id = 1;
+    string name = 2;
+    string email = 3;
+    string phone = 4;
+    string address = 5;
+}
+
+message ListUserRequest {}
+message UserInfo {
+    int64 user_id = 1;
+    string name = 2;
+    string email = 3;
+    string phone = 4;
+    string address = 5;
+}
+
+// 服务名应该PascalCase
+service User {
+    rpc Create(CreateUserRequest) returns (CreateUserResponse) {
+        // option type is http
+        option (google.api.http) = {
+            // Route to this method from POST request to /api/v1/users
+            post: "/api/v1/users"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            summary: "Create a user"
+            description: "Create a user to the service."
+            tags: "Users"
+        };
+    }
+
+    rpc Get(GetUserRequest) returns (GetUserResponse){
+        option (google.api.http) = {
+            // this is url, for RESTfull/JSON api and method
+            // this line means when a HTTP get request comes with "/v1/user/{user_id}" call this rpc method over this service
+            get: "/api/v1/users/{user_id}"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            summary: "Get a user"
+            description: "Get a user from the service."
+            tags: "Users"
+        };
+    }
+
+    rpc ListUser(ListUserRequest) returns (stream UserInfo) {
+        option (google.api.http) = {
+            // Route to this method from GET requests to /api/v1/users
+            get: "/api/v1/users"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            summary: "List users"
+            description: "List all users from the service."
+            tags: "Users"
+        };
+    }
+}

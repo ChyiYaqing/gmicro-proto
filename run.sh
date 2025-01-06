@@ -11,10 +11,11 @@ git fetch --all && git checkout main
 
 # 安装依赖
 sudo apt-get install -y protobuf-compiler golang-goprotobuf-dev
-go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest 
-go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest 
 go install google.golang.org/protobuf/cmd/protoc-gen-go@latest 
 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest 
+go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest 
+go install github.com/bufbuild/buf/cmd/buf@latest
 
 echo "Checking installed binaries:"
 ls -l $(go env GOPATH)/bin/
@@ -22,9 +23,10 @@ which protoc-gen-go
 which protoc-gen-grpc-gateway
 
 # 生成protobuf代码,将.proto文件编译成Go代码，包括gRPC服务代码
+# 每一个 -I 标志代表一个用于搜索导入的目录
 protoc \
-    -I ./third_proto \
-    -I . \
+    -I ./third_party \ 
+    -I ./proto \
     --go_out=./golang \
     --go_opt=paths=source_relative \
     --go-grpc_out=./golang \

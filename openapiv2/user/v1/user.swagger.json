@@ -2,12 +2,15 @@
   "swagger": "2.0",
   "info": {
     "title": "user/v1/user.proto",
-    "version": "version not set"
+    "version": "1.0"
   },
   "tags": [
     {
       "name": "User"
     }
+  ],
+  "schemes": [
+    "https"
   ],
   "consumes": [
     "application/json"
@@ -16,8 +19,41 @@
     "application/json"
   ],
   "paths": {
-    "/v1/user/create": {
+    "/api/v1/users": {
+      "get": {
+        "summary": "List users",
+        "description": "List all users from the service.",
+        "operationId": "User_ListUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1UserInfo"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1UserInfo"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      },
       "post": {
+        "summary": "Create a user",
+        "description": "Create a user to the service.",
         "operationId": "User_Create",
         "responses": {
           "200": {
@@ -36,6 +72,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Create User",
             "in": "body",
             "required": true,
             "schema": {
@@ -44,12 +81,14 @@
           }
         ],
         "tags": [
-          "User"
+          "Users"
         ]
       }
     },
-    "/v1/user/{userId}": {
+    "/api/v1/users/{userId}": {
       "get": {
+        "summary": "Get a user",
+        "description": "Get a user from the service.",
         "operationId": "User_Get",
         "responses": {
           "200": {
@@ -75,7 +114,7 @@
           }
         ],
         "tags": [
-          "User"
+          "Users"
         ]
       }
     }
@@ -113,7 +152,8 @@
       "type": "object",
       "properties": {
         "name": {
-          "type": "string"
+          "type": "string",
+          "title": "字段名应该是 lower_snake_case"
         },
         "email": {
           "type": "string"
@@ -124,7 +164,14 @@
         "address": {
           "type": "string"
         }
-      }
+      },
+      "description": "Create User",
+      "title": "CreateUserRequest",
+      "required": [
+        "name",
+        "email",
+        "phone"
+      ]
     },
     "v1CreateUserResponse": {
       "type": "object",
@@ -155,6 +202,31 @@
           "type": "string"
         }
       }
+    },
+    "v1UserInfo": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      }
     }
+  },
+  "externalDocs": {
+    "description": "gRPC-gateway gmicro-user proto",
+    "url": "https://"
   }
 }

@@ -1,0 +1,36 @@
+version: v2
+# 'clean', when set to true, deletes the directories, zip files, and/or jar files specified in the `out` field for
+# all plugins before running code generation.
+clean: false
+# 'plugins' is a list of plugin configurations used for buf generate.
+# 
+# A 'plugin' configuration has 8 possible keys:
+#   - one of (required):
+#     - 'remote': remote plugin name (for example buf.build/protocolbuffers/go)
+#     - 'protoc_builtin': a 'protoc' built-in plugin (for example 'cpp' for 'protoc-gen-cpp')
+#     - 'local': a string or list of strings that point to a protoc plugin binary on your
+#       '${PATH}'. If a list of strings is specified, the first is the binrary name, and the
+#       subsequent strings are considered arguments passed to the binrary.
+#     - 'out': <string> path to the file output, which is the same as v1 (required)
+#     - 'strategy': a string for the invocation strategy, which is the same as v1 (optional)
+#     - 'include_imports': <boolean> (optional, precedence given to CLI flag)
+#     - 'include_wkt': <boolean> (optional, precedence given to CLI flag)
+plugins:
+  - remote: buf.build/protocolbuffers/go
+    out: golang
+    opt: 
+      - paths=source_relative
+  - remote: buf.build/grpc/go
+    out: golang
+    opt: 
+      - paths=source_relative
+      - require_unimplemented_servers=false
+  - local: protoc-gen-grpc-gateway
+    out: golang
+    opt: 
+      - paths=source_relative
+      - allow_repeated_fields_in_body=true
+  - local: protoc-gen-openapiv2
+    out: openapiv2
+    opt: 
+      - allow_repeated_fields_in_body=true
