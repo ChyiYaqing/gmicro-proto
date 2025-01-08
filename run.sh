@@ -24,20 +24,23 @@ which protoc-gen-grpc-gateway
 
 # 生成protobuf代码,将.proto文件编译成Go代码，包括gRPC服务代码
 # 每一个 -I 标志代表一个用于搜索导入的目录
-protoc \
-    -I ./third_party \ 
-    -I ./proto \
-    --go_out=./golang \
-    --go_opt=paths=source_relative \
-    --go-grpc_out=./golang \
-    --go-grpc_opt=paths=source_relative \
-    --grpc-gateway_out=./golang \
-    --grpc-gateway_opt=paths=source_relative \
-    --grpc-gateway_opt=generate_unbound_methods=true \
-    --openapiv2_out=./golang \
-    --openapiv2_opt=generate_unbound_methods=true \
-    ${SERVICE_NAME}/**/*.proto
-# 
+#protoc \
+#    -I ./third_party \ 
+#    -I ./proto \
+#    --go_out=./golang \
+#    --go_opt=paths=source_relative \
+#    --go-grpc_out=./golang \
+#    --go-grpc_opt=paths=source_relative \
+#    --grpc-gateway_out=./golang \
+#    --grpc-gateway_opt=paths=source_relative \
+#    --grpc-gateway_opt=generate_unbound_methods=true \
+#    --openapiv2_out=./openapiv2/OpenAPI \
+#    --openapiv2_opt=generate_unbound_methods=true \
+#    ${SERVICE_NAME}/**/*.proto
+#
+# 选用buf 执行
+buf dep update
+buf generate
 
 # 初始化Go 模块
 mkdir -p golang/${SERVICE_NAME}
