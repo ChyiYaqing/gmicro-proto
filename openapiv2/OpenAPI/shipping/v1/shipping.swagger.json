@@ -2,12 +2,15 @@
   "swagger": "2.0",
   "info": {
     "title": "shipping/v1/shipping.proto",
-    "version": "version not set"
+    "version": "1.0"
   },
   "tags": [
     {
       "name": "Shipping"
     }
+  ],
+  "schemes": [
+    "http"
   ],
   "consumes": [
     "application/json"
@@ -15,7 +18,43 @@
   "produces": [
     "application/json"
   ],
-  "paths": {},
+  "paths": {
+    "/api/v1/shipping": {
+      "post": {
+        "summary": "Create a shipping",
+        "description": "Create a shipping to the service.",
+        "operationId": "Shipping_Create",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateShippingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Create Shipping",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateShippingRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Shipping"
+        ]
+      }
+    }
+  },
   "definitions": {
     "protobufAny": {
       "type": "object",
@@ -45,6 +84,29 @@
         }
       }
     },
+    "v1CreateShippingRequest": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "orderId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "address": {
+          "type": "string"
+        }
+      },
+      "description": "Create Shipping",
+      "title": "CreateShippingRequest",
+      "required": [
+        "userId",
+        "orderId",
+        "address"
+      ]
+    },
     "v1CreateShippingResponse": {
       "type": "object",
       "properties": {
@@ -54,5 +116,9 @@
         }
       }
     }
+  },
+  "externalDocs": {
+    "description": "gRPC-gateway gmicro-shipping proto",
+    "url": "http://"
   }
 }

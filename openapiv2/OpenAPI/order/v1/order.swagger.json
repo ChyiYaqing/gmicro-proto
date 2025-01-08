@@ -2,12 +2,15 @@
   "swagger": "2.0",
   "info": {
     "title": "order/v1/order.proto",
-    "version": "version not set"
+    "version": "1.0"
   },
   "tags": [
     {
       "name": "Order"
     }
+  ],
+  "schemes": [
+    "http"
   ],
   "consumes": [
     "application/json"
@@ -15,7 +18,76 @@
   "produces": [
     "application/json"
   ],
-  "paths": {},
+  "paths": {
+    "/api/v1/order": {
+      "post": {
+        "summary": "Create a order",
+        "description": "Create a order to the service.",
+        "operationId": "Order_Create",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Create Order",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/api/v1/order/{orderId}": {
+      "get": {
+        "summary": "Get a order",
+        "description": "Get a order from the service.",
+        "operationId": "Order_Get",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Order"
+        ]
+      }
+    }
+  },
   "definitions": {
     "protobufAny": {
       "type": "object",
@@ -44,6 +116,27 @@
           }
         }
       }
+    },
+    "v1CreateOrderRequest": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "orderItems": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1OrderItem"
+          }
+        }
+      },
+      "description": "Create Order",
+      "title": "CreateOrderRequest",
+      "required": [
+        "userId"
+      ]
     },
     "v1CreateOrderResponse": {
       "type": "object",
@@ -86,5 +179,9 @@
         }
       }
     }
+  },
+  "externalDocs": {
+    "description": "gRPC-gateway gmicro-order proto",
+    "url": "http://"
   }
 }
