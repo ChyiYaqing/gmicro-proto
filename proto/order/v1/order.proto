@@ -3,9 +3,32 @@ syntax = "proto3";
 package order.v1;
 option go_package = "github.com/chyiyaqing/gmicro-proto/order/v1";
 
+// well known type by google, gRPC gateway uses HTTP annotation.
+import "google/api/annotations.proto"; // 导入Google API注解
+import "protoc-gen-openapiv2/options/annotations.proto"; // 用于生成OpenAPI (Swagger) 文档
+
+// These annotations are used when generating the OpenAPI file.
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+    info: {version: "1.0"}
+    external_docs: {
+        url: "http://";
+        description: "gRPC-gateway gmicro-order proto";
+    }
+    schemes: HTTP;
+};
+
 message CreateOrderRequest {
     int64 user_id = 1;
     repeated OrderItem order_items = 2;
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+        json_schema: {
+            title: "CreateOrderRequest"
+            description: "Create Order"
+            required: ["user_id"]
+        }
+        example: ""
+    };
 }
 
 message OrderItem {
@@ -28,6 +51,25 @@ message GetOrderResponse {
 }
 
 service Order {
-    rpc Create(CreateOrderRequest) returns (CreateOrderResponse){}
-    rpc Get(GetOrderRequest) returns (GetOrderResponse){}
+    rpc Create(CreateOrderRequest) returns (CreateOrderResponse){
+        option (google.api.http) = {
+            post: "/api/v1/order"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            summary: "Create a order"
+            description: "Create a order to the service."
+            tags: "Order"
+        };
+    }
+    rpc Get(GetOrderRequest) returns (GetOrderResponse){
+        option (google.api.http) = {
+            get: "/api/v1/order/{order_id}"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            summary: "Get a order"
+            description: "Get a order from the service."
+            tags: "Order"
+        };
+    }
 }

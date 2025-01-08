@@ -3,10 +3,33 @@ syntax = "proto3";
 package payment.v1;
 option go_package = "github.com/chyiyaqing/gmicro-proto/payment/v1";
 
+// well known type by google, gRPC gateway uses HTTP annotation.
+import "google/api/annotations.proto"; // 导入Google API注解
+import "protoc-gen-openapiv2/options/annotations.proto"; // 用于生成OpenAPI (Swagger) 文档
+
+// These annotations are used when generating the OpenAPI file.
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+    info: {version: "1.0"}
+    external_docs: {
+        url: "http://";
+        description: "gRPC-gateway gmicro-payment proto";
+    }
+    schemes: HTTP;
+};
+
 message CreatePaymentRequest {
     int64 user_id = 1;
     int64 order_id = 2;
     float total_price = 3;
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+        json_schema: {
+            title: "CreatePaymentRequest"
+            description: "Create Payment"
+            required: ["user_id", "order_id", "total_price"]
+        }
+        example: ""
+    };
 }
 
 message CreatePaymentResponse {
@@ -14,5 +37,15 @@ message CreatePaymentResponse {
 }
 
 service Payment {
-    rpc Create(CreatePaymentRequest) returns (CreatePaymentResponse){}
+    rpc Create(CreatePaymentRequest) returns (CreatePaymentResponse){
+        option (google.api.http) = {
+            post: "/api/v1/payment"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            summary: "Create a payment"
+            description: "Create a payment to the service."
+            tags: "Payment"
+        };
+    }
 }

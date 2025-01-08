@@ -57,4 +57,4 @@ git push origin HEAD:main
 # -a: annotated 创建一个带注释的标签
 # -m: 指定标签的描述信息
 git tag -fa golang/${SERVICE_NAME}/${RELEASE_VERSION} -m "golang/${SERVICE_NAME}/${RELEASE_VERSION}"
-git push origin refs/tags/golang/${SERVICE_NAME}/${RELEASE_VERSION}
+git pull && git push origin refs/tags/golang/${SERVICE_NAME}/${RELEASE_VERSION}
