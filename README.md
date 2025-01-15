@@ -43,6 +43,32 @@ git tag v0.0.8 && git push origin v0.0.8
 > gRPC-Gateway为gRPC服务生成一个反向代理服务器，将Restful/JSON转换为gRPC.gRPC-Gateway将在你的gRPC服务上创建一个层，该层将充当客户端的Restful/JSON服务，gRPC-Gateway根据Protocol Buffer的gRPC服务定义生成代码.
 
 ![gRPC gateway](misc/images/grpc-gateway.png)
+ 
+### gRPC JWT (JSON Web Tokens)
+
+* JSON Web Tokens
+
+> JSON Web Tokens(JWT)是一种紧凑且独立的方式，用于以JSON对象的形式在各方之间安全地传输信息，此信息可以得到验证和信任，因为它是使用密钥或公/私钥对进行数学签名.
+
+JWT结构分为三个base64url编码的部分：
+
+  1. 指定所用令牌类型和算法的标头
+  2. 包含声明或数据的有效负载
+  3. 验证令牌完整的签名
+
+![JWT规范](/misc/images/JWT.png)
+
+```
+header:
+    {
+        "algo": "HS256", // 算法的标头
+        "type": "JWT" // 令牌的类型
+        "sub": "" // 令牌的主题
+        "iat": "" // 令牌的签发时间
+        "exp": "" // 令牌的过期时间
+    }
+```
+
 
 #### Prerequisties
 

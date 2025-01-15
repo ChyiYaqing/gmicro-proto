@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: swagger-proto
+  labels:
+    app: swagger-proto
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: swagger-proto
+  template:
+    metadata:
+      labels:
+        app: swagger-proto
+    spec:
+      containers:
+        - name: swagger-proto
+          image: chyiyaqing/swagger-proto:v0.0.1-27ca9b4
+          ports:
+            - containerPort: 8080
+          env:
+            - name: APPLICATION_PORT
+              value: "8080"
+            - name: TZ
+              value: "Asia/Shanghai"
+            - name: ENV
+              value: "development"

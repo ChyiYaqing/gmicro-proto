@@ -1,26 +1,17 @@
-.PHONY: proto
+.PHONY: build tag push 
 
-proto: 
-	@echo "generate order service code"
-	protoc -I order \
-		--go_out=golang/order \
-		--go_opt=paths=source_relative \
-		--go-grpc_out=golang/order \
-		--go-grpc_opt=paths=source_relative \
-		order/order.proto
-	
-	@echo "generate payment service code"
-	protoc -I payment \
-		--go_out=golang/payment \
-		--go_opt=paths=source_relative \
-		--go-grpc_out=golang/payment \
-		--go-grpc_opt=paths=source_relative \
-		payment/payment.proto
+GIT_TAG := $(shell git describe --tags --abbrev=0 2>/dev/null || echo "0.0.1")
+VERSION := $(GIT_TAG)-$(shell git rev-parse --short HEAD)
+USERNAME := chyiyaqing
+SERVICE_NAME := swagger-proto
 
-	@echo "generate shipping service code"
-	protoc -I shipping \
-		--go_out=golang/shipping \
-		--go_opt=paths=source_relative \
-		--go-grpc_out=golang/shipping \
-		--go-grpc_opt=paths=source_relative \
-		shipping/shipping.proto
+build:
+	docker build -t $(SERVICE_NAME):latest .
+
+tag: build
+	docker tag $(SERVICE_NAME):latest $(USERNAME)/$(SERVICE_NAME):v$(VERSION)
+
+push: tag
+	docker push $(USERNAME)/$(SERVICE_NAME):v$(VERSION)
+
+all: push
