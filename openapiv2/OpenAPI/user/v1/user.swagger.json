@@ -85,6 +85,41 @@
         ]
       }
     },
+    "/api/v1/users/login": {
+      "post": {
+        "summary": "User login",
+        "description": "Login",
+        "operationId": "User_Login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1LoginResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "User Login",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1LoginRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      }
+    },
     "/api/v1/users/{userId}": {
       "get": {
         "summary": "Get a user",
@@ -151,7 +186,7 @@
     "v1CreateUserRequest": {
       "type": "object",
       "properties": {
-        "name": {
+        "username": {
           "type": "string",
           "title": "字段名应该是 lower_snake_case"
         },
@@ -162,6 +197,12 @@
           "type": "string"
         },
         "address": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "role": {
           "type": "string"
         }
       },
@@ -199,6 +240,31 @@
           "type": "string"
         },
         "address": {
+          "type": "string"
+        }
+      }
+    },
+    "v1LoginRequest": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "description": "User Login",
+      "title": "LoginRequest",
+      "required": [
+        "username",
+        "password"
+      ]
+    },
+    "v1LoginResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
           "type": "string"
         }
       }

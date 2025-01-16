@@ -24,9 +24,7 @@ which protoc-gen-grpc-gateway
 
 # 生成protobuf代码,将.proto文件编译成Go代码，包括gRPC服务代码
 # 每一个 -I 标志代表一个用于搜索导入的目录
-protoc \
-    -I ./third_party \ 
-    -I ./proto \
+protoc -I ./third_party -I ./proto \
     --go_out=./golang \
     --go_opt=paths=source_relative \
     --go-grpc_out=./golang \

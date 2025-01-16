@@ -19,6 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
+	User_Login_FullMethodName    = "/user.v1.User/Login"
 	User_Create_FullMethodName   = "/user.v1.User/Create"
 	User_Get_FullMethodName      = "/user.v1.User/Get"
 	User_ListUser_FullMethodName = "/user.v1.User/ListUser"
@@ -30,6 +31,7 @@ const (
 //
 // 服务名应该PascalCase
 type UserClient interface {
+	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	Create(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
 	Get(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error)
 	ListUser(ctx context.Context, in *ListUserRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[UserInfo], error)
@@ -41,6 +43,16 @@ type userClient struct {
 
 func NewUserClient(cc grpc.ClientConnInterface) UserClient {
 	return &userClient{cc}
+}
+
+func (c *userClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LoginResponse)
+	err := c.cc.Invoke(ctx, User_Login_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *userClient) Create(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error) {
@@ -88,6 +100,7 @@ type User_ListUserClient = grpc.ServerStreamingClient[UserInfo]
 //
 // 服务名应该PascalCase
 type UserServer interface {
+	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	Create(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
 	Get(context.Context, *GetUserRequest) (*GetUserResponse, error)
 	ListUser(*ListUserRequest, grpc.ServerStreamingServer[UserInfo]) error
@@ -100,6 +113,9 @@ type UserServer interface {
 // pointer dereference when methods are called.
 type UnimplementedUserServer struct{}
 
+func (UnimplementedUserServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+}
 func (UnimplementedUserServer) Create(context.Context, *CreateUserRequest) (*CreateUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
@@ -127,6 +143,24 @@ func RegisterUserServer(s grpc.ServiceRegistrar, srv UserServer) {
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&User_ServiceDesc, srv)
+}
+
+func _User_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).Login(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: User_Login_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).Login(ctx, req.(*LoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _User_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -183,6 +217,10 @@ var User_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "user.v1.User",
 	HandlerType: (*UserServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Login",
+			Handler:    _User_Login_Handler,
+		},
 		{
 			MethodName: "Create",
 			Handler:    _User_Create_Handler,
