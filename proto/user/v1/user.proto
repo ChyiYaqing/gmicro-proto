@@ -17,6 +17,24 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
     schemes: HTTPS;
 };
 
+message LoginRequest {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+        json_schema: {
+            title: "LoginRequest"
+            description: "User Login"
+            required: ["username", "password"]
+        }
+        example: ""
+    };
+
+    string username = 1;
+    string password = 2;
+}
+
+message LoginResponse {
+    string access_token = 1;
+}
+
 // 消息名应该是 PascalCase
 message CreateUserRequest {
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
@@ -28,10 +46,12 @@ message CreateUserRequest {
         example: ""
     };
     // 字段名应该是 lower_snake_case
-    string name = 1;
+    string username = 1;
     string email = 2;
     string phone = 3;
     string address = 4;
+    string password = 5;
+    string role = 6;
 }
 
 message CreateUserResponse {
@@ -61,6 +81,20 @@ message UserInfo {
 
 // 服务名应该PascalCase
 service User {
+    rpc Login(LoginRequest) returns (LoginResponse) {
+        // option type is http
+        option (google.api.http) = {
+            // Route to this method from POST request to /api/v1/users
+            post: "/api/v1/users/login"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            summary: "User login"
+            description: "Login"
+            tags: "Users"
+        };
+    }
+
     rpc Create(CreateUserRequest) returns (CreateUserResponse) {
         // option type is http
         option (google.api.http) = {
